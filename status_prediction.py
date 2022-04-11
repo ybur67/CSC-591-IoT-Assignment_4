@@ -27,6 +27,7 @@ Device_Address = 0x68   # MPU6050 device address (sudo i2cdetect -y 1)
 
 #file_path = "output.csv"
 file_path = "output_predict.txt"
+lastDecision = ""
 
 def MPU_Init():
     #write to sample rate register
@@ -76,6 +77,8 @@ print("Reading Data of Gyroscope and Accelerometer")
 print("execute!!!")
 
 count = 0
+
+client = prediction.connect_ibm()
 
 #while True:
 while count < 500:
@@ -129,6 +132,7 @@ while count < 500:
     y_2 = [-1]
     x_2 = [{1: Gx, 2: Gy, 3: Gz, 4: Ax, 5: Ay, 6: Az}]
     trained_model = prediction.svm_load_model('trained.model')
-    prediction.run_prediction(y_2, x_2, trained_model)
+    #client = prediction.connect_ibm()
+    lastDecision = prediction.run_prediction(y_2, x_2, trained_model, client, lastDecision)
     sleep(0.1)
 
