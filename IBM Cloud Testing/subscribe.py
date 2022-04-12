@@ -6,15 +6,15 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-decision = ''
+dec_arr = []
 
 def DoorCallback(evt):
-    global decision
+    global dec_arr
     payload = json.dumps(evt.data).strip("{\" }").replace('"','').split(":")
     command = payload[1].lstrip(' ')
-    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + command)
-    decision += f"Decision: {command}\n"
+    decision = f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} || Decision: {command}"
     print(decision)
+    dec_arr.append(decision)
 
 print('1')
 options = wiotp.sdk.application.parseConfigFile("application.yaml")
@@ -30,5 +30,4 @@ print('6')
 
 @app.route("/")
 def hello_world():
-    print('>>>>>>>>>>>>>>>>>>>>>>>>')
-    return render_template('index.html', decision=decision)
+    return render_template('index.html', len = len(dec_arr), decisions=dec_arr)
