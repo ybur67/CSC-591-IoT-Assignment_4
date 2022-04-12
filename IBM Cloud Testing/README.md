@@ -24,3 +24,8 @@ This is the part of the forth assignment of 591-IoT. For this assignment, we are
 6. Run `ibmcloud target --cf`
 7. Run `ibmcloud cf push`
 8. Start the code on Pi and start opening and closing the door
+
+
+## Before running flask, run
+
+`$ export FLASK_APP=subscribe`
