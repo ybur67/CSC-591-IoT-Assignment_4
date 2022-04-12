@@ -46,7 +46,13 @@ def run_prediction(label, vector, model, client, lastDecision):
     n = 0
     p_labs, p_acc, p_vals = svm_predict(label, vector, model)
     # print(f"p_labs: {p_labs}")
-    decision = 'Open' if p_labs == [1.0] else 'Close'
+    #decision = 'Open' if p_labs == [1.0] else 'Close'
+    if p_labs[0] == 1.0:
+        decision = "Open"
+    elif p_labs[0] == -1.0:
+        decision = "Close"
+    elif p_labs[0] == 0.0:
+        decision = "Stable"
     """
     options = wiotp.sdk.application.parseConfigFile("application.yaml")
     client = wiotp.sdk.application.ApplicationClient(config=options)
