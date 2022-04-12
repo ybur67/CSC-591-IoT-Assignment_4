@@ -2,30 +2,33 @@ from pydoc_data.topics import topics
 import time
 import json
 import wiotp.sdk.application
+from flask import Flask, render_template
 
-broker = '192.168.0.179'
-port = 1883
-client_id = "RaspberryPiC"
-subtopics = ["Door"]
+app = Flask(__name__)
+
+decision = ''
 
 def DoorCallback(evt):
+    global decision
     payload = json.dumps(evt.data).strip("{\" }").replace('"','').split(":")
     command = payload[1].lstrip(' ')
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + command)
+    decision += f"Decision: {command}\n"
+    print(decision)
 
-def run():
-    options = wiotp.sdk.application.parseConfigFile("application.yaml")
-    client = wiotp.sdk.application.ApplicationClient(config=options)
-    client.connect()
-    for subs in subtopics:
-        client.subscribeToDeviceEvents(eventId=subs)
-    client.deviceEventCallback = DoorCallback
-    
-    while True:
-        time.sleep(5)
+print('1')
+options = wiotp.sdk.application.parseConfigFile("application.yaml")
+print('2')
+client = wiotp.sdk.application.ApplicationClient(config=options)
+print('3')
+client.connect()
+print('4')
+client.subscribeToDeviceEvents(eventId="Door")
+print('5')
+client.deviceEventCallback = DoorCallback
+print('6')
 
-if __name__ == '__main__':
-    try:
-        run()
-    except Exception as e:
-        print("Exception: ", e)
+@app.route("/")
+def hello_world():
+    print('>>>>>>>>>>>>>>>>>>>>>>>>')
+    return render_template('index.html', decision=decision)
