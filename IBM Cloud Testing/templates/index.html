@@ -6,8 +6,11 @@
   <title>G17 HW4</title>
  </head>
  <body>
-  {% if decision %}
-    <p>{{decision}}</p>
-  {% endif %}
+  <h2>G17 Assignment 4</h2>
+  <ul>
+    {%for i in range(0, len)%}
+      <li>{{decisions[i]}}</li>
+    {%endfor%}
+  </ul>
  </body>
 </html>
